@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart Checkout</title>
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .btn-primary {
+        background-color: #ff5200 !important;
+        border-color: #ff5200 !important;
+      }
+      .btn-primary:hover {
+        background-color: #e64b00 !important;
+        border-color: #e64b00 !important;
+      }
+      .cart-table th,
+      .cart-table td {
+        text-align: center;
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container my-5">
+      <h1 class="text-center mb-4">Your Cart</h1>
+      <div class="row">
+        <div class="col-lg-8 mb-4">
+          <!-- Cart Items Table -->
+          <table class="table table-bordered cart-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Product 1</td>
+                <td>2</td>
+                <td>₹500</td>
+                <td>₹1000</td>
+              </tr>
+              <tr>
+                <td>Product 2</td>
+                <td>1</td>
+                <td>₹300</td>
+                <td>₹300</td>
+              </tr>
+              <tr>
+                <td>Product 3</td>
+                <td>3</td>
+                <td>₹200</td>
+                <td>₹600</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-lg-4">
+          <!-- Cart Summary -->
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Order Summary</h5>
+              <hr />
+              <p class="d-flex justify-content-between">
+                <span>Subtotal</span>
+                <span>₹1900</span>
+              </p>
+              <p class="d-flex justify-content-between">
+                <span>Discount</span>
+                <span>-₹200</span>
+              </p>
+              <p class="d-flex justify-content-between">
+                <span>Delivery Charge</span>
+                <span>₹50</span>
+              </p>
+              <hr />
+              <h5 class="d-flex justify-content-between">
+                <span>Grand Total</span>
+                <span>₹1750</span>
+              </h5>
+              <button type="button" class="btn btn-primary btn-lg w-100 mt-3">
+                Proceed to Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign-Up Form</title>
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
+      rel="stylesheet"
+    />
+    <!-- Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+    <style>
+      .btn-primary {
+        background-color: #ff5200 !important;
+        border-color: #ff5200 !important;
+      }
+      .btn-primary:hover {
+        background-color: #e64b00 !important;
+        border-color: #e64b00 !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div
+      class="container vh-100 d-flex justify-content-center align-items-center flex-column"
+    >
+      <section>
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-md-9 col-lg-6 col-xl-5">
+            <img
+              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+              class="img-fluid"
+              alt="Sample image"
+            />
+          </div>
+          <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+            <form>
+              <h1 class="text-center my-4">Sign Up</h1>
+
+              <!-- Full Name -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="text"
+                  id="form3Example1"
+                  class="form-control form-control-lg"
+                  placeholder="Enter your full name"
+                />
+                <label class="form-label" for="form3Example1">Full Name</label>
+              </div>
+
+              <!-- Email input -->
+              <div data-mdb-input-init class="form-outline mb-4">
+                <input
+                  type="email"
+                  id="form3Example2"
+                  class="form-control form-control-lg"
+                  placeholder="Enter a valid email address"
+                />
+                <label class="form-label" for="form3Example2"
+                  >Email Address</label
+                >
+              </div>
+
+              <!-- Password input -->
+              <div data-mdb-input-init class="form-outline mb-3">
+                <input
+                  type="password"
+                  id="form3Example3"
+                  class="form-control form-control-lg"
+                  placeholder="Enter your password"
+                />
+                <label class="form-label" for="form3Example3">Password</label>
+              </div>
+
+              <!-- Confirm Password -->
+              <div data-mdb-input-init class="form-outline mb-3">
+                <input
+                  type="password"
+                  id="form3Example4"
+                  class="form-control form-control-lg"
+                  placeholder="Confirm your password"
+                />
+                <label class="form-label" for="form3Example4"
+                  >Confirm Password</label
+                >
+              </div>
+
+              <div class="text-center text-lg-start mt-4 pt-2">
+                <button
+                  type="button"
+                  data-mdb-button-init
+                  data-mdb-ripple-init
+                  class="btn btn-primary btn-lg w-100"
+                >
+                  Sign Up
+                </button>
+                <p class="small fw-bold mt-2 pt-1 mb-0 w-100 text-center">
+                  Already have an account?
+                  <a href="#!" class="link-danger">Login</a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"
+    ></script>
+  </body>
+</html>
