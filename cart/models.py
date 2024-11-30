@@ -1,9 +1,9 @@
 from django.db import models
-from user.models import User
 from food.models import FoodItem
+from django.conf import settings
 
 class Cart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def total_price(self):
