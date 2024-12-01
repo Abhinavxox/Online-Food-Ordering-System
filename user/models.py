@@ -4,9 +4,6 @@ from django.db import models
 class User(AbstractUser):
     is_vendor = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=True)
-
-    # Ensure default users are not admin-level
-    is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
 
     groups = models.ManyToManyField(
