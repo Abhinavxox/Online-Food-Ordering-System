@@ -9,7 +9,6 @@ from .serializers import VendorSerializer
 from rest_framework import status
 from user.models import User
 
-# Helper function for checking vendor access
 def is_vendor(user):
     return user.is_authenticated and user.is_vendor
 
@@ -51,17 +50,14 @@ def add_vendor(request):
     vendor_data = request.data.get('vendor', {})  # Vendor-specific details
 
     try:
-        # Fetch the user
         user = User.objects.get(id=user_id)
         if user.is_vendor:
             return Response({"error": "User is already a vendor."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # Update user fields
+
         user.is_vendor = True
         user.is_customer = False
         user.save()
 
-        # Create the vendor profile
         vendor = Vendor.objects.create(
             user=user,
             name=vendor_data.get('name', f"Vendor_{user.username}"),
