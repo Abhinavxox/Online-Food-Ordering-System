@@ -14,3 +14,6 @@ class Vendor(models.Model):
     address = models.TextField()
     phone = models.CharField(max_length=15)
     image = models.ImageField(upload_to='vendors/', null=True, blank=True)  # Add image field
+
+    def __str__(self):
+        return self.name

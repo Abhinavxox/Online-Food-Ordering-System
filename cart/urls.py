@@ -6,5 +6,4 @@ urlpatterns = [
     path('view/', view_cart, name='view_cart'),
     path('remove/', remove_from_cart, name='remove_from_cart'),
     path('update_quantity/', update_cart_item_quantity, name='update_cart_item_quantity'),
-
 ]

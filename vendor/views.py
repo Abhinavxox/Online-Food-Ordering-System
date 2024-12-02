@@ -88,3 +88,10 @@ def update_vendor_profile(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Vendor.DoesNotExist:
         return Response({"error": "Vendor profile not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def list_vendors(request):
+    vendors = Vendor.objects.all()
+    serializer = VendorSerializer(vendors, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
