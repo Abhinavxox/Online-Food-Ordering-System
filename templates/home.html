@@ -128,12 +128,12 @@
               aria-labelledby="navbarDropdownMenuAvatar"
             >
               <li>
-                <a class="dropdown-item" href="#">My profile</a>
+                <a class="dropdown-item" href="#" id="prof">My profile</a>
               </li>
               <li>
                 <a class="dropdown-item" href="#">Settings</a>
               </li>
-              <li>
+              <li onclick="logout()">
                 <a class="dropdown-item" href="#">Logout</a>
               </li>
             </ul>
@@ -533,5 +533,14 @@
       type="text/javascript"
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"
     ></script>
+
+    {% load static %}
+    <script src="{% static 'scripts/utils.js' %}"></script>
+    <script>
+      if (checkAuth()) {
+        const user = localStorage.getItem("username");
+        document.getElementById("prof").innerText = "Hi, " + user;
+      }
+    </script>
   </body>
 </html>

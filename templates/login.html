@@ -125,16 +125,18 @@
       function removeCookie() {
         if (localStorage.getItem("token")) {
           localStorage.removeItem("token");
+          localStorage.removeItem("username");
+          localStorage.removeItem("email");
           alert("Token removed");
         } else {
           alert("No token found");
         }
       }
 
-      {% comment %} if (checkAuth()) {
+      if (checkAuth()) {
         alert("You are already logged in");
         window.location.href = "/";
-      } {% endcomment %}
+      }
     </script>
   </body>
 </html>

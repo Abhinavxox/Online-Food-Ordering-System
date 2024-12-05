@@ -28,7 +28,8 @@ async function signup() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", data.user);
+        localStorage.setItem("username", data.user.username);
+        localStorage.setItem("email", data.user.email);
         alert("Signup successful! You will be logged in now.");
         window.location.href = "/";
       } else {
@@ -51,8 +52,6 @@ async function login() {
       username: document.getElementById("username").value,
       password: document.getElementById("password").value,
     };
-
-    console.log(formData);
     try {
       const response = await fetch("/user/login/", {
         method: "POST",
@@ -65,7 +64,8 @@ async function login() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        localStorage.setItem("user", data.user);
+        localStorage.setItem("username", data.user.username);
+        localStorage.setItem("email", data.user.email);
         alert("Login successful!");
         window.location.href = "/";
       } else {
@@ -78,6 +78,19 @@ async function login() {
     }
   } else {
     alert("You are already logged in.");
+    window.location.href = "/";
+  }
+}
+
+function logout() {
+  if (checkAuth()) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("email");
+    alert("Logout successful!");
+    window.location.href = "/";
+  } else {
+    alert("You are not logged in.");
     window.location.href = "/";
   }
 }

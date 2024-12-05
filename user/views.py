@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from .serializers import SignupSerializer, LoginSerializer
 from django.shortcuts import render
 import datetime
+from rest_framework.response import Response as JSONResponse
 
 @api_view(['GET','POST'])
 def signup(request):
@@ -17,16 +18,10 @@ def signup(request):
         if serializer.is_valid():
             user = serializer.save()
             token, _ = Token.objects.get_or_create(user=user)
-            response = Response({"token": token.key, "message": "Signup successful"}, status=HTTP_200_OK)
-            response.set_cookie(
-                'token',
-                token.key,
-                max_age=datetime.timedelta(days=1), 
-                httponly=True, 
-                secure=True, 
-                samesite='Lax'
-            )
-            return response
+            return JSONResponse({"token": token.key, "message": "Signup successful", "user":{
+                    "username": user.username,
+                    "email": user.email
+                }}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
@@ -41,16 +36,11 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
-                response =  Response({"token": token.key}, status=HTTP_200_OK)
-                response.set_cookie(
-                    'token',
-                    token.key,
-                    max_age=datetime.timedelta(days=1), 
-                    httponly=True, 
-                    secure=True, 
-                    samesite='Lax'
-                )
-                return response
+                return JSONResponse({"token": token.key, "user":{
+                    "username": user.username,
+                    "email": user.email
+                }}, status=HTTP_200_OK)
+                
             return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -58,12 +48,3 @@ def login(request):
 @permission_classes([IsAuthenticated])
 def protected_view(request):
     return Response({"message": f"Hello, {request.user.username}! You are authenticated."}, status=HTTP_200_OK)
-
-@api_view(['GET'])
-def logout(request):
-    #check if token is there in the request
-
-    if 'token' in request.COOKIES:
-        #just return the token
-        token = request.COOKIES['token']
-    return Response({"error": "No token found"}, status=HTTP_400_BAD_REQUEST)
