@@ -5,7 +5,7 @@
 {% block content %}
 {% load static %}
 <section
-  class="overflow-hidden bg-[url({% static "images/Hero.png"%})] bg-cover bg-top bg-no-repeat w-full"
+  class="overflow-hidden bg-[url({% static "images/Hero.png" %})] bg-cover bg-top bg-no-repeat w-full"
 >
   <div class="bg-black/50 p-8 md:p-12 lg:px-16 lg:py-24">
     <div class="text-center ltr:sm:text-left rtl:sm:text-right">
@@ -32,4 +32,51 @@
     </div>
   </div>
 </section>
+<!-- Header images -->
+<div class="container mx-auto py-4 mt-4">
+  <h2 class="text-center text-2xl font-semibold">What's on your mind?</h2>
+  <div class="flex flex-wrap justify-center gap-6 scale-75 md:scale-100">
+    <div class="w-1/3 sm:w-1/4 lg:w-1/6">
+      <img
+        src="{% static 'images/Pothichoru.avif' %}"
+        class="rounded-full w-full h-auto"
+        alt="Pothichoru"
+      />
+    </div>
+    <div class="w-1/3 sm:w-1/4 lg:w-1/6">
+      <img
+        src="{% static 'images/Shawarma.avif' %}"
+        class="rounded-full w-full h-auto"
+        alt="Shawarma"
+      />
+    </div>
+    <div class="w-1/3 sm:w-1/4 lg:w-1/6">
+      <img
+        src="{% static 'images/Burgers.avif' %}"
+        class="rounded-full w-full h-auto"
+        alt="Burgers"
+      />
+    </div>
+    <div class="w-1/3 sm:w-1/4 lg:w-1/6">
+      <img
+        src="{% static 'images/Biryani.avif' %}"
+        class="rounded-full w-full h-auto"
+        alt="Biryani"
+      />
+    </div>
+    <div class="w-1/3 sm:w-1/4 lg:w-1/6">
+      <img
+        src="{% static 'images/Pizzas.avif' %}"
+        class="rounded-full w-full h-auto"
+        alt="Pizzas"
+      />
+    </div>
+  </div>
+</div>
+<!-- Header images -->
+
+<!-- Vendors list -->
+{% include "vendorslist.html" %}
+<!-- Vendors list -->
+
 {% endblock %}
