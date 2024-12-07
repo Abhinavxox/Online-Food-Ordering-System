@@ -262,3 +262,58 @@ async function fetchFoodItems() {
     alert("You are not authorized!");
   }
 }
+
+async function fetchVendors() {
+  if (checkAuth()) {
+    try {
+      const response = await fetch("/vendor/all", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const vendorsContainer = document.querySelector(".grid");
+
+        vendorsContainer.innerHTML = "";
+
+        data.forEach((vendor) => {
+          const vendorCard = document.createElement("div");
+          vendorCard.className =
+            "bg-white rounded-lg shadow-md overflow-hidden";
+
+          vendorCard.innerHTML = `
+            <div class="relative">
+              <img
+                src="${vendor.image}"
+                class="w-full h-40 object-cover"
+                alt="${vendor.name}"
+              />
+              <div class="absolute top-2 left-2 bg-black text-white text-sm px-2 py-1 rounded">
+                Special Offer
+              </div>
+            </div>
+            <div class="p-4">
+              <p class="text-green-600 text-sm mb-1">⭐ 4.5 • 30-40 mins</p>
+              <h5 class="text-lg font-semibold mb-1">${vendor.name}</h5>
+              <p class="text-gray-500 text-sm">
+                ${vendor.description}<br />
+                ${vendor.address}
+              </p>
+            </div>
+          `;
+          vendorsContainer.appendChild(vendorCard);
+        });
+      } else {
+        const errorData = await response.json();
+        alert("Failed to fetch vendors: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
+}
