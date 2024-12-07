@@ -88,9 +88,7 @@ function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("email");
     alert("Logout successful!");
-    window.location.href = "/";
   } else {
     alert("You are not logged in.");
-    window.location.href = "/";
   }
 }
