@@ -2,4 +2,34 @@
 <h1></h1>
 {% block title %}Home - Dwiggy{% endblock %}
 <h1></h1>
-{% block content %} {% endblock %}
+{% block content %}
+{% load static %}
+<section
+  class="overflow-hidden bg-[url({% static "images/Hero.png"%})] bg-cover bg-top bg-no-repeat"
+>
+  <div class="bg-black/50 p-8 md:p-12 lg:px-16 lg:py-24">
+    <div class="text-center ltr:sm:text-left rtl:sm:text-right">
+      <h2 class="text-2xl font-bold text-white sm:text-3xl md:text-5xl mb-10">
+        Discover restaurants and more near you!
+      </h2>
+
+      <p
+        class="text-center w-full text-white text-lg"
+      >
+      Best Deals For You. Order Food Online. 
+      <br/>
+      Get Your Favourite Food Delivered To Your Doorstep. 
+      </p>
+
+      <div class="mt-4 sm:mt-8">
+        <a
+          href="#"
+          class="inline-block rounded-full bg-orange-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-orange-700"
+        >
+        Order Now!
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
