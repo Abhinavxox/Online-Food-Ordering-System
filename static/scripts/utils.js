@@ -139,8 +139,17 @@ function populateVendorForm(vendor) {
 async function updateVendorProfile() {
   const is_vendor = localStorage.getItem("is_vendor");
   if (checkAuth() && is_vendor) {
-    const form = document.getElementById("vendor-form");
-    const formData = new FormData(form);
+    const formData = new FormData();
+    formData.append("name", document.getElementById("name").value);
+    formData.append(
+      "description",
+      document.getElementById("description").value
+    );
+    formData.append("address", document.getElementById("address").value);
+    formData.append("phone", document.getElementById("phone").value);
+    if (document.getElementById("image").files.length > 0) {
+      formData.append("image", document.getElementById("image").files[0]);
+    }
 
     try {
       const response = await fetch("/vendor/profile/update/", {
