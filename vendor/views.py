@@ -108,3 +108,9 @@ def get_vendor_profile(request):
     serializer = VendorSerializer(vendor)
     return Response(serializer.data, status=status.HTTP_200_OK)
     
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_vendor_food(request):
+    food_items = FoodItem.objects.filter(vendor=request.user)
+    serializer = FoodItemSerializer(food_items, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
