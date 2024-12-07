@@ -8,6 +8,7 @@ from .models import Vendor
 from .serializers import VendorSerializer
 from rest_framework import status
 from user.models import User
+from django.shortcuts import render
 
 def is_vendor(user):
     return user.is_authenticated and user.is_vendor
@@ -95,3 +96,15 @@ def list_vendors(request):
     vendors = Vendor.objects.all()
     serializer = VendorSerializer(vendors, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def vendor_dashboard(request):
+    return render(request, 'vendordashboard.html')
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_vendor_profile(request):
+    vendor = get_object_or_404(Vendor, user=request.user)
+    serializer = VendorSerializer(vendor)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    

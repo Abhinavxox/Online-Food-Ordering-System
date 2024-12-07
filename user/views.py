@@ -6,7 +6,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .serializers import SignupSerializer, LoginSerializer
 from django.shortcuts import render
-import datetime
 from rest_framework.response import Response as JSONResponse
 
 @api_view(['GET','POST'])

@@ -96,3 +96,73 @@ function logout() {
     alert("You are not logged in.");
   }
 }
+
+async function vendorProfile() {
+  const is_vendor = localStorage.getItem("is_vendor");
+  if (checkAuth() && is_vendor) {
+    try {
+      const response = await fetch("/vendor/profile/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        populateVendorForm(data);
+      } else {
+        const errorData = await response.json();
+        alert("Vendor profile fetch failed: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  } else {
+    alert("You are not authorized!");
+  }
+}
+
+function populateVendorForm(vendor) {
+  console.log(vendor);
+  document.getElementById("name").value = vendor.name || "";
+  document.getElementById("description").value = vendor.description || "";
+  document.getElementById("address").value = vendor.address || "";
+  document.getElementById("phone").value = vendor.phone || "";
+  const vendorImage = document.querySelector("img[src]");
+  if (vendor.image && vendorImage) {
+    vendorImage.src = vendor.image;
+  }
+}
+
+async function updateVendorProfile() {
+  const is_vendor = localStorage.getItem("is_vendor");
+  if (checkAuth() && is_vendor) {
+    const form = document.getElementById("vendor-form");
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch("/vendor/profile/update/", {
+        method: "PUT",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Vendor profile updated successfully!");
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert("Vendor profile update failed: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  } else {
+    alert("You are not authorized!");
+  }
+}
