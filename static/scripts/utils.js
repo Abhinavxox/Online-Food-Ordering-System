@@ -30,6 +30,7 @@ async function signup() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("email", data.user.email);
+        localStorage.setItem("is_vendor", data.user.is_vendor);
         alert("Signup successful! You will be logged in now.");
         window.location.href = "/";
       } else {
@@ -63,9 +64,11 @@ async function login() {
 
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         localStorage.setItem("token", data.token);
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("email", data.user.email);
+        localStorage.setItem("is_vendor", data.user.is_vendor);
         alert("Login successful!");
         window.location.href = "/";
       } else {
@@ -87,6 +90,7 @@ function logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("email");
+    localStorage.removeItem("is_vendor");
     alert("Logout successful!");
   } else {
     alert("You are not logged in.");

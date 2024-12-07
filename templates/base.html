@@ -31,7 +31,7 @@
         <nav class="md:ml-auto flex flex-wrap items-center text-base">
           <a class="mr-5 hover:text-gray-900" href="#">Home</a>
           <a class="mr-5 hover:text-gray-900" href="#}">Menu</a>
-          <a class="mr-5 hover:text-gray-900" href="#">About</a>
+          <a class="mr-5 hover:text-gray-900" href="#">Offers</a>
           <a class="mr-5 hover:text-gray-900" href="#">Contact</a>
         </nav>
         <!-- Dynamic buttons -->
@@ -48,7 +48,7 @@
     <!-- Navbar -->
 
     <!-- Main Content -->
-    <div class="container">{% block content %}{% endblock %}</div>
+    <div class="">{% block content %}{% endblock %}</div>
 
     <script src="https://cdn.tailwindcss.com"></script>
     {% load static %}
@@ -57,29 +57,75 @@
       const authButtons = document.getElementById("auth-buttons");
       if (checkAuth()) {
         const username = localStorage.getItem("username");
+        const is_vendor = localStorage.getItem("is_vendor");
         // If authenticated
         authButtons.innerHTML = `
-          <a class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-            Hi, ${username}
-          </a>
-          <a
-            href="#"
-            class="inline-flex items-center bg-red-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-red-600 rounded text-base mt-4 md:mt-0 ml-4"
-            onclick="logoutFunc()"
-          >
-            Logout
-          </a>
-        `;
+            <div class="relative">
+              <button
+                id="dropdownButton"
+                class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+              >
+                <i class="bi bi-person-circle text-xl mr-2"></i> Hi, ${username}
+              </button>
+              <div
+                id="dropdownMenu"
+                class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg"
+              >
+                ${
+                  is_vendor
+                    ? `
+                <a
+                  {% comment %} href="{% url 'profile' %}" {% endcomment %}
+                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Vendor Dashboard
+                </a>
+                `
+                    : ``
+                }
+                
+                <a
+                  {% comment %} href="{% url 'orders' %}" {% endcomment %}
+                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                >
+                  Orders
+                </a>
+                <button
+                  onclick="logoutFunc()"
+                  class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          `;
+
+        // Dropdown toggle logic
+        const dropdownButton = document.getElementById("dropdownButton");
+        const dropdownMenu = document.getElementById("dropdownMenu");
+        dropdownButton.addEventListener("click", () => {
+          dropdownMenu.classList.toggle("hidden");
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener("click", (event) => {
+          if (
+            !dropdownButton.contains(event.target) &&
+            !dropdownMenu.contains(event.target)
+          ) {
+            dropdownMenu.classList.add("hidden");
+          }
+        });
       } else {
         // If not authenticated
         authButtons.innerHTML = `
-          <a
-            href="{% url 'login' %}"
-            class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-          >
-            Login
-          </a>
-        `;
+            <a
+              href="{% url 'login' %}"
+              class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
+            >
+              Login
+            </a>
+          `;
       }
 
       function logoutFunc() {

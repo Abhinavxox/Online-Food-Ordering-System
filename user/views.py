@@ -20,7 +20,8 @@ def signup(request):
             token, _ = Token.objects.get_or_create(user=user)
             return JSONResponse({"token": token.key, "message": "Signup successful", "user":{
                     "username": user.username,
-                    "email": user.email
+                    "email": user.email, 
+                    'is_vendor': user.is_vendor | user.is_staff
                 }}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -38,7 +39,8 @@ def login(request):
                 token, _ = Token.objects.get_or_create(user=user)
                 return JSONResponse({"token": token.key, "user":{
                     "username": user.username,
-                    "email": user.email
+                    "email": user.email,
+                    'is_vendor': user.is_vendor | user.is_staff
                 }}, status=HTTP_200_OK)
                 
             return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
