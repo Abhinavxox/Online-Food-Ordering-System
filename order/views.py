@@ -7,7 +7,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from .models import Order, OrderItem
 from cart.models import Cart
 from vendor.models import Vendor
-from user.models import User
+from django.shortcuts import render
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -131,3 +131,8 @@ def order_detail(request, order_id):
     }
 
     return Response(order_details, status=HTTP_200_OK)
+
+api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def order_dashboard(request):
+    return render(request, 'orders.html')

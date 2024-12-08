@@ -419,6 +419,27 @@ async function getVendorProfileForMenu() {
   }
 }
 
+function createOrder() {
+  if (checkAuth()) {
+    fetch(`/order/create/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert("Order created successfully!");
+        window.location.href = "/order/view/" + data.id + "/";
+      })
+      .catch((error) => {
+        alert("Error:", error.message);
+      });
+  } else {
+    alert("Please login to create order!");
+  }
+}
+
 function viewCart() {
   if (checkAuth()) {
     const user_id = localStorage.getItem("user_id");
@@ -481,12 +502,23 @@ function updateCartUI(data) {
   cartContainer.innerHTML = "";
 
   // Populate vendor and items
-  data.items.forEach((vendorData) => {
-    const vendorDiv = document.createElement("div");
-    vendorDiv.className =
-      "vendor-card border rounded shadow-sm p-4 bg-white mb-4";
+  if (data.items.length === 0) {
+    cartContainer.innerHTML = `
+      <div class="flex items-center justify-center h-96 border rounded shadow-sm p-4 bg-white">
+        <h3 class="text-xl font-bold text-gray-600 text-center">
+          Your cart is empty! Add some food items to continue.
+          <br />
+          <a href="/" class="text-blue-500 hover:underline text-center">Browse Delicious Food!</a>
+        </h3>
+      </div>
+      `;
+  } else {
+    data.items.forEach((vendorData) => {
+      const vendorDiv = document.createElement("div");
+      vendorDiv.className =
+        "vendor-card border rounded shadow-sm p-4 bg-white mb-4";
 
-    vendorDiv.innerHTML = `
+      vendorDiv.innerHTML = `
       <div class="flex items-center mb-4">
         <img
           src="${vendorData.vendor.image}"
@@ -526,9 +558,9 @@ function updateCartUI(data) {
           .join("")}
       </div>
     `;
-
-    cartContainer.appendChild(vendorDiv);
-  });
+      cartContainer.appendChild(vendorDiv);
+    });
+  }
 
   // Calculate totals
   let total = 0;
@@ -538,8 +570,8 @@ function updateCartUI(data) {
     });
   });
 
-  const discount = 100;
-  const deliveryCharge = 50;
+  const discount = data.items.length == 0 ? 0 : 100;
+  const deliveryCharge = data.items.length == 0 ? 0 : 50;
   const grandTotal = total + deliveryCharge - discount;
 
   // Update order summary
@@ -552,7 +584,7 @@ function updateCartUI(data) {
     </div>
     <div class="flex justify-between text-gray-700">
       <span>Discount</span>
-      <span>-₹${discount}</span>
+      <span>₹${discount}</span>
     </div>
     <div class="flex justify-between text-gray-700">
       <span>Delivery Charge</span>
@@ -566,8 +598,80 @@ function updateCartUI(data) {
     <button
       type="button"
       class="bg-orange-500 text-white text-lg font-bold w-full py-2 rounded mt-3 hover:bg-orange-600"
+      onclick="createOrder()"
     >
       Proceed to Checkout
     </button>
   `;
+}
+
+async function getAllOrders() {
+  if (checkAuth()) {
+    try {
+      const response = await fetch("/order/all/", {
+        method: "GET",
+        headers: {
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      });
+
+      if (response.ok) {
+        const orders = await response.json();
+        const ordersContainer = document.getElementById("orders");
+        ordersContainer.innerHTML = ""; // Clear the loading message
+
+        // Render orders dynamically
+        orders.forEach((order, index) => {
+          const orderHtml = `
+            <div class="bg-white shadow rounded-lg p-4">
+              <div class="flex justify-between">
+                <div>
+                  <h2 class="font-semibold text-lg text-gray-800">Order #${
+                    index + 1
+                  }</h2>
+                  <p class="text-sm text-gray-600">Order ID: #${
+                    order.order_id
+                  }</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-gray-500">${new Date(
+                    order.created_at
+                  ).toLocaleString()}</p>
+                </div>
+              </div>
+              <div class="mt-2 text-gray-700">
+                ${order.items
+                  .map(
+                    (item) =>
+                      `<p>${item.food_item} (${item.vendor}) x ${
+                        item.quantity
+                      } - ₹${item.total_price.toFixed(2)}</p>`
+                  )
+                  .join("")}
+              </div>
+              <div class="mt-4 flex justify-between items-center">
+                <p class="text-sm text-gray-600">
+                  Total Price: <span class="font-semibold text-green-600">₹${order.total_price.toFixed(
+                    2
+                  )}</span>
+                </p>
+                <a href="#" class="text-orange-600 hover:underline text-sm">
+                  View Details
+                </a>
+              </div>
+            </div>
+          `;
+          ordersContainer.innerHTML += orderHtml;
+        });
+      } else {
+        const errorData = await response.json();
+        alert("Failed to fetch orders: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  } else {
+    alert("Please login to view orders!");
+  }
 }
