@@ -24,14 +24,16 @@
       >
         <a
           class="flex title font-medium items-center text-gray-900 mb-4 md:mb-0"
+          href="{% url 'home' %}"
         >
           <i class="bi bi-shop text-2xl"></i>
           <span class="ml-3 text-xl mt-1">Order Food Online</span>
         </a>
         <nav class="md:ml-auto flex flex-wrap items-center text-base">
           <a class="mr-5 hover:text-gray-900" href="{% url 'home' %}">Home</a>
-          <a class="mr-5 hover:text-gray-900" href="#}">Menu</a>
-          <a class="mr-5 hover:text-gray-900" href="#">Offers</a>
+          <a class="mr-5 hover:text-gray-900" href="{% url 'vendor_menu' vendor_id="1"%}"
+            >Menu</a
+          >
           <p
             class="mr-5 hover:text-gray-900 cursor-pointer"
             onclick="viewCart()"
