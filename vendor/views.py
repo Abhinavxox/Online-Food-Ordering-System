@@ -128,3 +128,9 @@ def get_vendor_profile_menu(request, vendor_id):
     vendor = get_object_or_404(Vendor, id=vendor_id)
     serializer = VendorSerializer(vendor)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def register_vendor(request):
+    vendor = Vendor.objects.create(user=request.user)
+    serializer = VendorSerializer(vendor)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)

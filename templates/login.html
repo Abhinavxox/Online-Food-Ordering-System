@@ -99,14 +99,9 @@
                   >
                     Login
                   </button>
-                  <button type="button" 
-                  class="btn btn-link"
-                  onclick="removeCookie()"
-                  >Reset token</button>
-                
                   <p class="small fw-bold mt-2 pt-1 mb-0 w-100 text-center">
                     Don't have an account?
-                    <a href="#!" class="link-danger">Register</a>
+                    <a href="{% url "signup" %}" class="link-danger">Register</a>
                   </p>
                 </div>
               </form>
@@ -122,17 +117,6 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.1.0/mdb.umd.min.js"
     ></script>
     <script>
-      function removeCookie() {
-        if (localStorage.getItem("token")) {
-          localStorage.removeItem("token");
-          localStorage.removeItem("username");
-          localStorage.removeItem("email");
-          alert("Token removed");
-        } else {
-          alert("No token found");
-        }
-      }
-
       if (checkAuth()) {
         alert("You are already logged in");
          window.location.href = "/"; 
