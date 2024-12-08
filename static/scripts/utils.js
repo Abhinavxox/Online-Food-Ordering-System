@@ -405,7 +405,7 @@ function getCart() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        updateCartUI(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -414,4 +414,98 @@ function getCart() {
   } else {
     alert("Please login to view cart!");
   }
+}
+
+function updateCartUI(data) {
+  const cartContainer = document.querySelector(".cart-container");
+  const summaryContainer = document.querySelector(".border.rounded.shadow-sm");
+
+  // Clear existing content
+  cartContainer.innerHTML = "";
+
+  // Populate vendor and items
+  data.items.forEach((vendorData) => {
+    const vendorDiv = document.createElement("div");
+    vendorDiv.className =
+      "vendor-card border rounded shadow-sm p-4 bg-white mb-4";
+
+    vendorDiv.innerHTML = `
+      <div class="flex items-center mb-4">
+        <img
+          src="${vendorData.vendor.image}"
+          alt="${vendorData.vendor.name} Logo"
+          class="h-16 w-16 rounded-full border mr-4"
+        />
+        <div>
+          <h5 class="text-lg font-bold">${vendorData.vendor.name}</h5>
+          <p class="text-sm text-gray-600">${vendorData.vendor.address}</p>
+          <p class="text-sm text-gray-600">${vendorData.vendor.phone}</p>
+        </div>
+      </div>
+      <div class="food-items grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        ${vendorData.food
+          .map(
+            (item) => `
+          <div class="food-item border rounded shadow-sm p-3 bg-gray-50 flex flex-col items-center">
+            <img
+              src="${item.image}"
+              alt="${item.name}"
+              class="h-24 w-24 mb-2 object-cover"
+            />
+            <div class="text-center">
+              <h6 class="font-bold text-gray-800">${item.name}</h6>
+              <p class="text-sm text-gray-600">Price: ₹${item.price}</p>
+              <p class="text-sm text-gray-600">Quantity: ${item.quantity}</p>
+              <p class="text-sm font-bold text-gray-900">Total: ₹${item.total_price}</p>
+            </div>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+
+    cartContainer.appendChild(vendorDiv);
+  });
+
+  // Calculate totals
+  let total = 0;
+  data.items.forEach((vendorData) => {
+    vendorData.food.forEach((item) => {
+      total += item.total_price;
+    });
+  });
+
+  const discount = 100;
+  const deliveryCharge = 50;
+  const grandTotal = total + deliveryCharge - discount;
+
+  // Update order summary
+  summaryContainer.innerHTML = `
+    <h5 class="text-lg font-bold">Order Summary</h5>
+    <hr class="my-2" />
+    <div class="flex justify-between text-gray-700">
+      <span>Subtotal</span>
+      <span>₹${total}</span>
+    </div>
+    <div class="flex justify-between text-gray-700">
+      <span>Discount</span>
+      <span>-₹${discount}</span>
+    </div>
+    <div class="flex justify-between text-gray-700">
+      <span>Delivery Charge</span>
+      <span>₹${deliveryCharge}</span>
+    </div>
+    <hr class="my-2" />
+    <div class="flex justify-between font-bold text-gray-900">
+      <span>Grand Total</span>
+      <span>₹${grandTotal}</span>
+    </div>
+    <button
+      type="button"
+      class="bg-orange-500 text-white text-lg font-bold w-full py-2 rounded mt-3 hover:bg-orange-600"
+    >
+      Proceed to Checkout
+    </button>
+  `;
 }

@@ -46,6 +46,7 @@ def view_cart(request):
                     {
                         "id": item.id,
                         "name": item.food_item.name,
+                        "image": item.food_item.image.url if item.food_item.image else None,
                         "price": item.food_item.price,
                         "quantity": item.quantity,
                         "total_price": item.total_price()
