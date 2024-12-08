@@ -376,7 +376,7 @@ async function fetchVendorMenu() {
               <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover mt-2 rounded-md" />
               <div class="flex justify-between items-center mt-4">
                 <span class="font-bold text-gray-700">${item.price}</span>
-                <button class="bg-blue-500 text-white text-sm py-1 px-3 rounded hover:bg-blue-600 cursor-pointer"
+                <button class="bg-orange-500 text-white text-sm py-1 px-3 rounded hover:bg-orange-600 cursor-pointer"
                   onclick="addFoodToCart(${item.id})"
                 >
                   Add

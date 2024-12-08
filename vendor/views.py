@@ -119,7 +119,10 @@ def get_vendor_food(request):
 
 @api_view(['GET'])
 def get_vendor_food2(request, vendor_id):
-    food_items = FoodItem.objects.filter(vendor=vendor_id)
+    #get user id from vendor id
+    vendor = get_object_or_404(Vendor, id=vendor_id)
+    user = vendor.user
+    food_items = FoodItem.objects.filter(vendor=user)
     serializer = FoodItemSerializer(food_items, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
