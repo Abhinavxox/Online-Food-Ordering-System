@@ -29,7 +29,6 @@ def view_cart(request):
     for item in cart_items:
         vendor_items[Vendor.objects.get(user=item.food_item.vendor)].append(item)
 
-    print(vendor_items)
     cart_details = {
         "cart_id": cart.id,
         "user": user.username,
@@ -96,17 +95,15 @@ def add_to_cart(request):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def remove_from_cart(request):
+def remove_from_cart(request, food_item_id):
     user = request.user
-    food_item_id = request.data.get('food_item_id')
     
     if not food_item_id:
         return Response({"error": "Food item ID is required."}, status=HTTP_400_BAD_REQUEST)
     
     try:
-        cart = Cart.objects.get(user=user)
-        cart_item = CartItem.objects.get(cart=cart, food_item_id=food_item_id)
-        cart_item.delete()
+        item = CartItem.objects.get(id=food_item_id)
+        item.delete()   
         return Response({"message": "Food item removed from cart."}, status=HTTP_200_OK)
     except Cart.DoesNotExist:
         return Response({"error": "Cart not found."}, status=HTTP_404_NOT_FOUND)

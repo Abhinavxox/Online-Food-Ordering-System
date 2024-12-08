@@ -315,6 +315,37 @@ async function fetchVendors() {
   }
 }
 
+async function addFoodToCart(id) {
+  if (checkAuth()) {
+    const data = {
+      food_item_id: id,
+      quantity: 1,
+    };
+
+    try {
+      const response = await fetch("/cart/add/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Food item added to cart successfully!");
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert("Failed to add food item to cart: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  }
+}
+
 async function fetchVendorMenu() {
   const url = window.location.href;
   const v = url.split("/menu/");
@@ -345,7 +376,9 @@ async function fetchVendorMenu() {
               <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover mt-2 rounded-md" />
               <div class="flex justify-between items-center mt-4">
                 <span class="font-bold text-gray-700">${item.price}</span>
-                <button class="bg-blue-500 text-white text-sm py-1 px-3 rounded hover:bg-blue-600">
+                <button class="bg-blue-500 text-white text-sm py-1 px-3 rounded hover:bg-blue-600 cursor-pointer"
+                  onclick="addFoodToCart(${item.id})"
+                >
                   Add
                 </button>
               </div>
@@ -416,6 +449,30 @@ function getCart() {
   }
 }
 
+async function removeFoodItemFromCart(foodItemId) {
+  try {
+    const response = await fetch(`/cart/remove/${foodItemId}/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (response.ok) {
+      alert("Food item removed from cart successfully!");
+      window.location.reload();
+    } else {
+      const errorData = await response.json();
+      alert(
+        "Failed to remove food item from cart: " + JSON.stringify(errorData)
+      );
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
+  }
+}
+
 function updateCartUI(data) {
   const cartContainer = document.querySelector(".cart-container");
   const summaryContainer = document.querySelector(".border.rounded.shadow-sm");
@@ -446,7 +503,12 @@ function updateCartUI(data) {
         ${vendorData.food
           .map(
             (item) => `
-          <div class="food-item border rounded shadow-sm p-3 bg-gray-50 flex flex-col items-center">
+          <div class="food-item border rounded shadow-sm p-3 bg-gray-50 flex flex-col items-center relative">
+            <button class="bg-red-500 text-white text-sm h-7 w-7 rounded-full hover:bg-red-600 cursor-pointer absolute -top-2 -right-2"
+              onclick="removeFoodItemFromCart(${item.id})"
+            >   
+              X
+            </button>
             <img
               src="${item.image}"
               alt="${item.name}"
