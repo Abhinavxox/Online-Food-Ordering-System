@@ -430,7 +430,7 @@ function createOrder() {
       .then((response) => response.json())
       .then((data) => {
         alert("Order created successfully!");
-        window.location.href = "/order/view/" + data.id + "/";
+        window.location.href = "/order/dashboard/";
       })
       .catch((error) => {
         alert("Error:", error.message);
@@ -673,5 +673,6 @@ async function getAllOrders() {
     }
   } else {
     alert("Please login to view orders!");
+    window.location.href = "/user/login/";
   }
 }
