@@ -91,7 +91,6 @@ def update_vendor_profile(request):
         return Response({"error": "Vendor profile not found."}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def list_vendors(request):
     vendors = Vendor.objects.all()
     serializer = VendorSerializer(vendors, many=True)
@@ -102,6 +101,10 @@ def vendor_dashboard(request):
     return render(request, 'vendordashboard.html')
 
 @api_view(['GET'])
+def vendor_menu(request, vendor_id):
+    return render(request, 'menu.html')
+
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_vendor_profile(request):
     vendor = get_object_or_404(Vendor, user=request.user)
@@ -109,8 +112,19 @@ def get_vendor_profile(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
     
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def get_vendor_food(request):
     food_items = FoodItem.objects.filter(vendor=request.user)
     serializer = FoodItemSerializer(food_items, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_vendor_food2(request, vendor_id):
+    food_items = FoodItem.objects.filter(vendor=vendor_id)
+    serializer = FoodItemSerializer(food_items, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_vendor_profile_menu(request, vendor_id):
+    vendor = get_object_or_404(Vendor, id=vendor_id)
+    serializer = VendorSerializer(vendor)
     return Response(serializer.data, status=status.HTTP_200_OK)

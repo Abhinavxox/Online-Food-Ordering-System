@@ -264,28 +264,23 @@ async function fetchFoodItems() {
 }
 
 async function fetchVendors() {
-  if (checkAuth()) {
-    try {
-      const response = await fetch("/vendor/all", {
-        method: "GET",
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      });
+  try {
+    const response = await fetch("/vendor/all", {
+      method: "GET",
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        const vendorsContainer = document.querySelector(".grid");
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      const vendorsContainer = document.querySelector(".grid");
 
-        vendorsContainer.innerHTML = "";
+      vendorsContainer.innerHTML = "";
 
-        data.forEach((vendor) => {
-          const vendorCard = document.createElement("div");
-          vendorCard.className =
-            "bg-white rounded-lg shadow-md overflow-hidden";
+      data.forEach((vendor) => {
+        const vendorCard = document.createElement("div");
+        vendorCard.className = "bg-white rounded-lg shadow-md overflow-hidden";
 
-          vendorCard.innerHTML = `
+        vendorCard.innerHTML = `
             <div class="relative">
               <img
                 src="${vendor.image}"
@@ -305,15 +300,85 @@ async function fetchVendors() {
               </p>
             </div>
           `;
-          vendorsContainer.appendChild(vendorCard);
-        });
-      } else {
-        const errorData = await response.json();
-        alert("Failed to fetch vendors: " + JSON.stringify(errorData));
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+        vendorsContainer.appendChild(vendorCard);
+      });
+    } else {
+      const errorData = await response.json();
+      alert("Failed to fetch vendors: " + JSON.stringify(errorData));
     }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
+  }
+}
+
+async function fetchVendorMenu() {
+  const url = window.location.href;
+  const v = url.split("/menu/");
+  const vendorId = v[v.length - 1].replace("/", "");
+
+  try {
+    const response = await fetch(`/vendor/food/${vendorId}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const menuContainer = document.getElementById("menu");
+
+      menuContainer.innerHTML = "";
+
+      data.forEach((item) => {
+        const menuItem = document.createElement("div");
+
+        menuItem.innerHTML = `
+          <!-- Food Item ${item.id} -->
+          <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <div class="p-4">
+              <h5 class="text-lg font-bold">${item.name}</h5>
+              <p class="text-sm text-gray-500 mt-2">
+                ${item.description}
+              </p>
+              <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover mt-2 rounded-md" />
+              <div class="flex justify-between items-center mt-4">
+                <span class="font-bold text-gray-700">${item.price}</span>
+                <button class="bg-blue-500 text-white text-sm py-1 px-3 rounded hover:bg-blue-600">
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        menuContainer.appendChild(menuItem);
+      });
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
+  }
+}
+
+async function getVendorProfileForMenu() {
+  const url = window.location.href;
+  const v = url.split("/menu/");
+  const vendorId = v[v.length - 1].replace("/", "");
+  try {
+    const response = await fetch(`/vendor/details/${vendorId}`, {
+      method: "GET",
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      document.querySelector(".name").textContent = data.name;
+      document.querySelector("#name").textContent = data.name;
+      document.querySelector("#description").textContent = data.description;
+      document.querySelector(".address").textContent = data.address;
+    } else {
+      const errorData = await response.json();
+      alert("Vendor profile fetch failed: " + JSON.stringify(errorData));
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred. Please try again.");
   }
 }
