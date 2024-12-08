@@ -4,6 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from .models import Cart, CartItem, FoodItem
 from .models import Cart
+from .models import CartItem
+from .models import FoodItem
+from django.shortcuts import render
+from vendor.models import Vendor
+
+
+from collections import defaultdict
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -16,20 +23,37 @@ def view_cart(request):
         return Response({"message": "Cart is empty."}, status=HTTP_404_NOT_FOUND)
 
     cart_items = cart.cart_items.all()
+    
+    # Group items by vendor
+    vendor_items = defaultdict(list)
+    for item in cart_items:
+        vendor_items[Vendor.objects.get(user=item.food_item.vendor)].append(item)
+
+    print(vendor_items)
     cart_details = {
         "cart_id": cart.id,
         "user": user.username,
         "total_price": cart.total_price(),
         "items": [
             {
-                "food_item_id": item.food_item.id,
-                "food_item_name": item.food_item.name,
-                "description": item.food_item.description,
-                "price": float(item.food_item.price),
-                "quantity": item.quantity,
-                "total_price": item.total_price(),
+                "vendor": {
+                    "name": vendor.name,
+                    "address": vendor.address,
+                    "phone": vendor.phone,
+                    "image": vendor.image.url if vendor.image else None,
+                },
+                "food": [
+                    {
+                        "id": item.id,
+                        "name": item.food_item.name,
+                        "price": item.food_item.price,
+                        "quantity": item.quantity,
+                        "total_price": item.total_price()
+                    }
+                    for item in items
+                ]
             }
-            for item in cart_items
+            for vendor, items in vendor_items.items()
         ]
     }
 
@@ -124,3 +148,8 @@ def update_cart_item_quantity(request):
         "cart_item_id": cart_item.id if cart_item.pk else None,
         "quantity": quantity_change
     }, status=HTTP_200_OK)
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def cart_render(request, user_id):
+    return render(request, 'cart.html')

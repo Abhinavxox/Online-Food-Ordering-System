@@ -31,6 +31,7 @@ async function signup() {
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("is_vendor", data.user.is_vendor);
+        localStorage.setItem("user_id", data.user.id);
         alert("Signup successful! You will be logged in now.");
         window.location.href = "/";
       } else {
@@ -69,6 +70,7 @@ async function login() {
         localStorage.setItem("username", data.user.username);
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("is_vendor", data.user.is_vendor);
+        localStorage.setItem("user_id", data.user.id);
         alert("Login successful!");
         window.location.href = "/";
       } else {
@@ -91,6 +93,7 @@ function logout() {
     localStorage.removeItem("username");
     localStorage.removeItem("email");
     localStorage.removeItem("is_vendor");
+    localStorage.removeItem("user_id");
     alert("Logout successful!");
   } else {
     alert("You are not logged in.");
@@ -281,7 +284,7 @@ async function fetchVendors() {
         vendorCard.className = "bg-white rounded-lg shadow-md overflow-hidden";
 
         vendorCard.innerHTML = `
-            <div class="relative">
+            <a class="relative " href = "/vendor/menu/${vendor.id}/"}">
               <img
                 src="${vendor.image}"
                 class="w-full h-40 object-cover"
@@ -380,5 +383,35 @@ async function getVendorProfileForMenu() {
   } catch (error) {
     console.error("Error:", error);
     alert("An error occurred. Please try again.");
+  }
+}
+
+function viewCart() {
+  if (checkAuth()) {
+    const user_id = localStorage.getItem("user_id");
+    window.location.href = "/cart/view/" + user_id + "/";
+  } else {
+    alert("Please login to view cart!");
+  }
+}
+
+function getCart() {
+  if (checkAuth()) {
+    fetch(`/cart/view/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+      });
+  } else {
+    alert("Please login to view cart!");
   }
 }

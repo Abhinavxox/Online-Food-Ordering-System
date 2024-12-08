@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from .serializers import SignupSerializer, LoginSerializer
 from django.shortcuts import render
 from rest_framework.response import Response as JSONResponse
+from cart.models import Cart
 
 @api_view(['GET','POST'])
 def signup(request):
@@ -16,8 +17,10 @@ def signup(request):
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            Cart.objects.create(user=user)
             token, _ = Token.objects.get_or_create(user=user)
             return JSONResponse({"token": token.key, "message": "Signup successful", "user":{
+                    "id": user.id,
                     "username": user.username,
                     "email": user.email, 
                     'is_vendor': user.is_vendor | user.is_staff
@@ -37,6 +40,7 @@ def login(request):
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
                 return JSONResponse({"token": token.key, "user":{
+                    "id": user.id,
                     "username": user.username,
                     "email": user.email,
                     'is_vendor': user.is_vendor | user.is_staff
