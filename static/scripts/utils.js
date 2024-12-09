@@ -364,27 +364,24 @@ async function fetchVendorMenu() {
 
       data.forEach((item) => {
         const menuItem = document.createElement("div");
+        menuItem.className =
+          "bg-white shadow-md rounded-lg overflow-hidden h-full flex flex-col";
 
         menuItem.innerHTML = `
-          <!-- Food Item ${item.id} -->
-          <div class="bg-white shadow-md rounded-lg overflow-hidden">
-            <div class="p-4">
-              <h5 class="text-lg font-bold">${item.name}</h5>
-              <p class="text-sm text-gray-500 mt-2">
-                ${item.description}
-              </p>
-              <img src="${item.image}" alt="${item.name}" class="w-full h-32 object-cover mt-2 rounded-md" />
-              <div class="flex justify-between items-center mt-4">
-                <span class="font-bold text-gray-700">${item.price}</span>
-                <button class="bg-orange-500 text-white text-sm py-1 px-3 rounded hover:bg-orange-600 cursor-pointer"
-                  onclick="addFoodToCart(${item.id})"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
+          <div class="p-4 flex-grow">
+            <h5 class="text-lg font-bold">${item.name}</h5>
+            <p class="text-sm text-gray-500 mt-2">${item.description}</p>
+          </div>
+          <img src="${item.image}" alt="${item.name}" class="w-full px-4 h-32 object-cover rounded-md" />
+          <div class="p-4 flex justify-between items-center">
+            <span class="font-bold text-gray-700">${item.price}</span>
+            <button class="bg-orange-500 text-white text-sm py-1 px-3 rounded hover:bg-orange-600 cursor-pointer"
+              onclick="addFoodToCart(${item.id})">
+              Add
+            </button>
           </div>
         `;
+
         menuContainer.appendChild(menuItem);
       });
     }
