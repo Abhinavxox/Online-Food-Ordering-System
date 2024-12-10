@@ -40,6 +40,9 @@
           >
             Cart
           </p>
+          <p class="mr-5 hover:text-gray-900 cursor-pointer" id="address" onclick="checkAddress()">
+            Add Address
+          </p>
         </nav>
         <!-- Dynamic buttons -->
         <div id="auth-buttons">
@@ -65,7 +68,12 @@
       if (checkAuth()) {
         const username = localStorage.getItem("username");
         const is_vendor = localStorage.getItem("is_vendor");
-        // If authenticated
+        const address = localStorage.getItem("address");
+
+        if (address != "null") {
+          document.getElementById("address").innerHTML = address;
+        }
+
         authButtons.innerHTML = `
             <div class="relative">
               <button

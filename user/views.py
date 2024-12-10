@@ -24,7 +24,8 @@ def signup(request):
                     "id": user.id,
                     "username": user.username,
                     "email": user.email, 
-                    'is_vendor': user.is_vendor | user.is_staff
+                    'is_vendor': user.is_vendor | user.is_staff,
+                    'address': user.address if user.address else None
                 }}, status=HTTP_200_OK)
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
@@ -44,7 +45,8 @@ def login(request):
                     "id": user.id,
                     "username": user.username,
                     "email": user.email,
-                    'is_vendor': user.is_vendor | user.is_staff
+                    'is_vendor': user.is_vendor | user.is_staff,
+                    'address': user.address if user.address else None
                 }}, status=HTTP_200_OK)
                 
             return Response({"error": "Invalid credentials"}, status=HTTP_400_BAD_REQUEST)
@@ -54,3 +56,14 @@ def login(request):
 @permission_classes([IsAuthenticated])
 def protected_view(request):
     return Response({"message": f"Hello, {request.user.username}! You are authenticated."}, status=HTTP_200_OK)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_address(request):
+    user = request.user
+    address = request.data.get('address')
+    if address is None:
+        return Response({"error": "Address is required"}, status=HTTP_400_BAD_REQUEST)
+    user.address = address
+    user.save()
+    return Response({"message": "Address added successfully"}, status=HTTP_200_OK)

@@ -5,6 +5,7 @@ class User(AbstractUser):
     is_vendor = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
+    address = models.CharField(max_length=100, blank=True)
 
     groups = models.ManyToManyField(
         'auth.Group',

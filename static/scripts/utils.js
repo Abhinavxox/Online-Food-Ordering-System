@@ -27,12 +27,7 @@ async function signup() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("username", data.user.username);
-        localStorage.setItem("email", data.user.email);
-        localStorage.setItem("is_vendor", data.user.is_vendor);
-        localStorage.setItem("user_id", data.user.id);
-        alert("Signup successful! You will be logged in now.");
+        alert("Signup successful! You may logged in now.");
         window.location.href = "/";
       } else {
         const errorData = await response.json();
@@ -40,7 +35,8 @@ async function signup() {
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      alert("Signup successful! You will be logged in now.");
+      window.location.href = "/";
     }
   } else {
     alert("You are already logged in.");
@@ -71,6 +67,7 @@ async function login() {
         localStorage.setItem("email", data.user.email);
         localStorage.setItem("is_vendor", data.user.is_vendor);
         localStorage.setItem("user_id", data.user.id);
+        localStorage.setItem("address", data.user.address);
         alert("Login successful!");
         window.location.href = "/";
       } else {
@@ -94,6 +91,7 @@ function logout() {
     localStorage.removeItem("email");
     localStorage.removeItem("is_vendor");
     localStorage.removeItem("user_id");
+    localStorage.removeItem("address");
     alert("Logout successful!");
   } else {
     alert("You are not logged in.");
@@ -671,5 +669,56 @@ async function getAllOrders() {
   } else {
     alert("Please login to view orders!");
     window.location.href = "/user/login/";
+  }
+}
+
+async function checkAddress() {
+  if (checkAuth()) {
+    if (localStorage.getItem("address") == "null") {
+      const address = prompt("Please enter your address:");
+      if (address.length > 0) {
+        addAddress(address);
+      } else {
+        alert("Please enter a valid address!");
+      }
+    } else {
+      document.getElementById("address").textContent =
+        localStorage.getItem("address");
+    }
+  } else {
+    alert("Please login to view address!");
+    window.location.href = "/user/login/";
+  }
+}
+
+async function addAddress(address) {
+  if (checkAuth()) {
+    const formData = {
+      address: address,
+    };
+    try {
+      const response = await fetch("/user/address/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert("Address added successfully!");
+        localStorage.setItem("address", address);
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        alert("Failed to add address: " + JSON.stringify(errorData));
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again.");
+    }
+  } else {
+    alert("Please login to add address!");
   }
 }
